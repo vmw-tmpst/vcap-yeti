@@ -30,15 +30,15 @@ Steps
 
 Folder tree is like:
 
-|--- assets
+    |--- assets
 
-    |--- django
+      |--- django
 
-    |--- grails
+      |--- grails
 
-    |--- spring
+      |--- spring
 
-    |--- ...
+      |--- ...
 
 You can put your app code under corresponding framework folder.
 
@@ -78,17 +78,17 @@ Edit assets.yml, add your app configs.
 
 e.g.
 
-spring_app_test: # app name used in yeti case
+      spring_app_test: # app name used in yeti case
 
- framework: "spring"
+        framework: "spring"
 
- instances: 1
+        instances: 1
 
- runtime: "java"
+        runtime: "java"
 
-     memory: 320
+          memory: 320
 
-     path: ".assets-binaries/spring_test_app.war" # path of your binary/app
+          path: ".assets-binaries/spring_test_app.war" # path of your binary/app
 
 5. Use your app locally in case
 -----------------------
