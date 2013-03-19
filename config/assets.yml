@@ -2,648 +2,442 @@
 # Timeout value after we which we give up on AppCloud operations that are long running.
 # Within this value, we poll for completion status of the operations with the
 # sleep interval between successive poll requests specified below.
-timeout_secs: 60
+
+# Since we have switched to buildpacks staging time has increased
+# so until we start caching gems, bins, etc. timeout is 5min
+timeout_secs: 900
+
 job_timeout_secs: 30
 sleep_secs: 1
 
 simple_app:
-  framework: "sinatra"
-  memory: 128
-  runtime: "ruby19"
+  memory: 512
+  command: "bundle exec ruby foo.rb -p $VCAP_APP_PORT"
   path: "assets/sinatra/hello_vcap"
 
 simple_app2:
-  framework: "sinatra"
-  instances: 3
-  runtime: "ruby19"
-  memory: 64
+  instances: 1
+  memory: 512
+  command: "bundle exec ruby foo.rb -p $VCAP_APP_PORT"
   path: "assets/sinatra/hello_vcap"
 
 modified_simple_app2:
-  framework: "sinatra"
   instances: 2
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/modified_simple_app"
+  command: "bundle exec ruby foo.rb -p $VCAP_APP_PORT"
 
 simple_app3:
-  framework: "sinatra"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/hello_vcap"
+  command: "bundle exec ruby foo.rb -p $VCAP_APP_PORT"
 
 memcached_app:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 128
+  memory: 512
   path: "assets/sinatra/memcached_app"
+  command: "bundle exec ruby memcached.rb -p $VCAP_APP_PORT"
 
 tiny_java_app:
-  framework: "java_web"
   instances: 1
-  runtime: "java"
-  memory: 64
+  memory: 512
   path: ".assets-binaries/java_tiny_app.war"
 
 simple_db_app:
-  framework: "sinatra"
-  memory: 128
+  memory: 512
   path: "assets/sinatra/simple_db_app"
+  command: "bundle exec ruby simple_db_app.rb -p $VCAP_APP_PORT"
 
 redis_lb_app:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 128
+  memory: 512
   path: "assets/sinatra/redis_lb_app"
+  command: "bundle exec ruby redis_lb.rb -p $VCAP_APP_PORT"
 
 env_test_app:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/env_test_app"
+  command: "bundle exec ruby env_test.rb -p $VCAP_APP_PORT"
 
 broken_app:
-  framework: "sinatra"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/broken_app"
+  command: "bundle exec ruby broken.rb -p $VCAP_APP_PORT"
+
+git_gems_app_ruby18:
+  memory: 512
+  path: "assets/sinatra/git_gems_app"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
+
+git_gems_app_ruby19:
+  memory: 512
+  path: "assets/sinatra/git_gems_app"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
+
+sinatra_gem_groups:
+  memory: 512
+  path: "assets/sinatra/gem_groups"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
+
+sinatra_windows_gemfile:
+  memory: 512
+  path: "assets/sinatra/windows_gemfile"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
 broken_gem_app:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/broken_gem_app"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
 rails3_app:
-  framework: "rails3"
-  memory: 128
-  runtime: "ruby19"
+  memory: 512
   path: "assets/rails3/rails3_app"
+  command: "bundle exec rake db:migrate && bundle exec rails server thin -p $PORT"
 
 jpa_app:
-  framework: "spring"
-  runtime: java
   memory: 512
   path: ".assets-binaries/jpa-guestbook.war"
 
 hibernate_app:
-  framework: "spring"
   instances: 1
-  runtime: "java"
-  memory: 320
+  memory: 512
   path: ".assets-binaries/hibernate-guestbook.war"
 
 dbrails_app:
-  framework: "rails3"
-  runtime: "ruby19"
-  memory: 128
+  memory: 512
   path: "assets/rails3/dbrails_app"
+  command: "bundle exec rake db:migrate && bundle exec rails server thin -p $PORT"
 
 dbrails_broken_app:
-  framework: "rails3"
-  runtime: "ruby19"
-  memory: 128
+  memory: 512
   path: "assets/rails3/dbrails_broken_app"
 
 grails_app:
-  runtime: "java"
-  framework: "grails"
-  memory: 512
-  path: ".assets-binaries/guestbook.war"
-
-grails_app_7:
-  framework: "grails"
-  runtime: java7
   memory: 512
   path: ".assets-binaries/guestbook.war"
 
 roo_app:
-  framework: "spring"
-  runtime: "java"
-  memory: 256
+  memory: 512
   path: ".assets-binaries/roo-guestbook.war"
 
-mochiweb_test:
-  framework: "otp_rebar"
-  runtime: "erlangR14B02"
-  memory: 64
-  path: "assets/mochiweb/mochiweb_test/rel/mochiweb_test"
-
 simple-lift-app:
-  framework: "lift"
-  memory: 256
-  runtime: "java"
+  memory: 512
   path: ".assets-binaries/hello_lift.war"
 
 lift-db-app:
-  framework: "lift"
-  memory: 256
-  runtime: "java"
+  memory: 512
   path: ".assets-binaries/lift-db-app.war"
 
 tomcat-version-check-app:
-  framework: "spring"
-  memory: 128
-  runtime: "java"
+  memory: 512
   tomcat_version: "6.0.35"
   path: ".assets-binaries/tomcat-version-check-app.war"
 
-app_rails_version18:
-  framework: "rails3"
-  runtime: ruby18
-  memory: 256
+app_rails_version:
+  memory: 512
   path: "assets/rails3/app_rails_version"
-
-app_rails_version19:
-  framework: "rails3"
-  runtime: ruby19
-  memory: 256
-  path: "assets/rails3/app_rails_version"
+  command: "bundle exec rake db:migrate && bundle exec rails server -p $PORT"
 
 app_rails_service:
-  framework: "rails3"
-  runtime: ruby19
-  memory: 256
+  memory: 512
   path: "assets/rails3/app_rails_service"
+  command: "bundle exec rake db:migrate && bundle exec rails server thin -p $PORT"
 
 app_rails_service_autoconfig:
-  framework: "rails3"
-  runtime: "ruby19"
-  memory: 256
+  memory: 512
   path: "assets/rails3/app_rails_service_autoconfig"
+  command: "bundle exec rake db:migrate && bundle exec thin start -R config.ru -e $RAILS_ENV -p $PORT"
 
-rails_autoconfig_disabled_by_file:
-  framework: "rails3"
-  runtime: "ruby19"
-  memory: 256
-  path: "assets/rails3/autoconfig_disabled_by_file"
-
-rails_autoconfig_disabled_by_gem:
-  framework: "rails3"
-  runtime: "ruby19"
-  memory: 256
-  path: "assets/rails3/autoconfig_disabled_by_gem"
+rails_3_2_app:
+  memory: 512
+  path: "assets/rails3/rails_3_2_app"
 
 app_rack_service:
-  framework: "rack"
-  runtime: "ruby18"
-  memory: 256
+  memory: 512
   path: "assets/rack/app_rack_service"
 
 app_rack_service_autoconfig:
-  framework: "rack"
   instances: 1
-  runtime: "ruby18"
   startup: "ruby app.rb"
-  memory: 64
+  memory: 512
   path: "assets/rack/app_rack_service_autoconfig"
 
 rack_autoconfig_ruby19:
-  framework: "rack"
   instances: 1
-  runtime: "ruby19"
   startup: "ruby app.rb"
-  memory: 64
+  memory: 512
   path: "assets/rack/autoconfig_ruby19"
 
-rack_autoconfig_disabled_by_file:
-  framework: "rack"
-  instances: 1
-  runtime: "ruby18"
-  startup: "ruby app.rb"
-  memory: 64
-  path: "assets/rack/autoconfig_disabled_by_file"
-
-rack_autoconfig_disabled_by_gem:
-  framework: "rack"
-  instances: 1
-  runtime: "ruby18"
-  startup: "ruby app.rb"
-  memory: 64
-  path: "assets/rack/autoconfig_disabled_by_gem"
-
 app_sinatra_service:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/app_sinatra_service"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
 app_sinatra_service2:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 128
+  memory: 512
   path: "assets/sinatra/app_sinatra_service"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
 app_sinatra_service_autoconfig:
-  framework: "sinatra"
   instances: 1
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/app_sinatra_service_autoconfig"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
+
+app_sinatra_modular:
+  memory: 512
+  path: "assets/sinatra/app_sinatra_modular"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
 
 service_quota_app:
-  framework: "sinatra"
-  runtime: "ruby19"
   memory: 512
   path: "assets/sinatra/app_sinatra_service_quota/"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
+
+redis_conn_quota_app:
+  memory: 512
+  path: "assets/sinatra/app_sinatra_service_quota/"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
 amqp_autoconfig:
-  framework: "sinatra"
   instances: 1
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/amqp_autoconfig"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
 
 autoconfig_unsupported_versions:
-  framework: "sinatra"
   instances: 1
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/autoconfig_unsupported_versions"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
 
 autoconfig_unsupported_carrot_version:
-  framework: "sinatra"
   instances: 1
-  runtime: "ruby19"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/autoconfig_unsupported_carrot_version"
-
-sinatra_autoconfig_disabled_by_file:
-  framework: "sinatra"
-  instances: 1
-  runtime: "ruby19"
-  memory: 64
-  path: "assets/sinatra/autoconfig_disabled_by_file"
-
-sinatra_autoconfig_disabled_by_gem:
-  framework: "sinatra"
-  instances: 1
-  runtime: "ruby19"
-  memory: 64
-  path: "assets/sinatra/autoconfig_disabled_by_gem"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
 
 app_node_service:
-  framework: "node"
-  runtime: node
-  memory: 64
+  memory: 512
   path: "assets/node/app_node_service"
-
-app_node_dependencies04:
-  framework: "node"
-  runtime: node
-  memory: 64
-  path: "assets/node/node_dependencies04"
+  command: "node main.js"
 
 app_node_dependencies06:
-  framework: "node"
-  runtime: node06
-  memory: 64
+  memory: 512
   path: "assets/node/node_dependencies06"
+  command: "node app.js"
+
+app_node_dependencies08:
+  memory: 512
+  path: "assets/node/node_dependencies08"
+  command: "node app.js"
 
 app_node_version04:
-  framework: "node"
-  runtime: node
-  memory: 64
+  memory: 512
   path: "assets/node/app_node_version"
+  command: "node app.js"
 
-app_node_version06:
-  framework: "node"
-  runtime: node06
-  memory: 64
-  path: "assets/node/app_node_version"
+node_autoconfig04:
+  memory: 512
+  path: "assets/node/node_autoconfig"
+  command: "node app.js"
+
+node_autoconfig06:
+  memory: 512
+  path: "assets/node/node_autoconfig"
+  command: "node app.js"
+
+node_autoconfig08:
+  memory: 512
+  path: "assets/node/node_autoconfig"
+  command: "node app.js"
+
+node_git_modules:
+  memory: 512
+  path: "assets/node/node_git"
+  command: "node app.js"
 
 app_spring_service:
-  framework: "spring"
   instances: 1
-  runtime: "java"
-  memory: 256
-  path: ".assets-binaries/app_spring_service.war"
-
-app_spring_service_7:
-  framework: "spring"
-  runtime: java7
   memory: 512
   path: ".assets-binaries/app_spring_service.war"
 
 my_test_app_env_test_app:
-  framework: "sinatra"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/hello_vcap"
+  command: "bundle exec ruby foo.rb -p $VCAP_APP_PORT"
 
 neo4j_app:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 128
+  memory: 512
   path: "assets/sinatra/neo4j_app"
-
-simple_wsgi_app:
-  framework: "wsgi"
-  runtime: "python2"
-  memory: 64
-  path: "assets/django/simple_wsgi_app"
-
-wsgi_app_with_requirements:
-  framework: "wsgi"
-  runtime: "python2"
-  memory: 64
-  path: "assets/django/wsgi_app_with_requirements"
-
-simple_django_app:
-  framework: "django"
-  runtime: "python2"
-  memory: 64
-  path: "assets/django/simple_django_app"
-
-simple_php_app:
-  framework: "php"
-  runtime: "php"
-  memory: 64
-  path: "assets/php/simple_php_app"
+  command: "bundle exec ruby neo4j.rb -p $VCAP_APP_PORT"
 
 spring-env-app:
-  framework: "spring"
-  memory: 256
-  runtime: "java"
+  memory: 512
   path: ".assets-binaries/spring-env.war"
 
 auto-reconfig-test-app:
-  framework: "spring"
-  runtime: "java"
-  memory: 256
+  memory: 512
   path: ".assets-binaries/auto-reconfig-test-app.war"
 
 auto-reconfig-missing-deps-test-app:
-  framework: "spring"
-  memory: 256
-  runtime: "java"
+  memory: 512
   path: ".assets-binaries/auto-reconfig-missing-deps-test-app.war"
 
 atmos_app:
-  framework: "sinatra"
-  memory: 256
+  memory: 512
   path: "assets/sinatra/atmos_app"
+  command: "bundle exec ruby server.rb -p $VCAP_APP_PORT"
 
 simple_kv_app:
-  framework: "sinatra"
-  runtime: "ruby18"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/simple_kv_app"
+  command: "bundle exec ruby server.rb -p $VCAP_APP_PORT"
 
 brokered_service_app:
-  framework: "sinatra"
-  runtime: "ruby18"
-  memory: 64
+  memory: 512
   path: "assets/sinatra/brokered_service_app"
+  command: "bundle exec ruby server.rb -p $VCAP_APP_PORT"
 
 java_app_with_startup_delay:
-  framework: "java_web"
   instances: 1
-  runtime: "java"
-  memory: 128
+  memory: 512
   path: ".assets-binaries/app_with_startup_delay.war"
 
 rails_console_test_app:
-  framework: "rails3"
-  runtime: "ruby18"
-  memory: 256
+  memory: 512
   path: "assets/rails3/app_rails_service"
 
 rails_console_19_test_app:
-  framework: "rails3"
-  runtime: "ruby19"
-  memory: 256
-  path: "assets/rails3/hello_vcap"
+  memory: 512
+  path: "assets/rails3/rails_console_test_app"
+  command: "bundle exec rake db:migrate && bundle exec rails server -p $PORT"
 
-vblob_app:
-  framework: "sinatra"
-  runtime: "ruby19"
-  memory: 256
+blob_app:
+  memory: 512
   path: "assets/sinatra/app_sinatra_service"
-
-standalone_ruby18_app:
-  framework: "standalone"
   command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
-  memory: 64
-  runtime: ruby18
+
+standalone_ruby_app:
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
+  memory: 512
   path: "assets/standalone/ruby_app"
 
-standalone_ruby19_app:
-  framework: "standalone"
-  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
-  memory: 64
-  runtime: ruby19
-  path: "assets/standalone/ruby_app"
-
-standalone_simple_ruby18_app:
-  framework: "standalone"
+standalone_simple_ruby_app:
   command: "ruby simple.rb"
-  memory: 64
-  runtime: ruby18
+  memory: 512
   path: "assets/standalone/simple_ruby_app"
   no_url: true
 
-standalone_simple_ruby18_quotes_app:
-  framework: "standalone"
+standalone_simple_ruby_quotes_app:
   command: "ruby \"simple.rb\""
-  memory: 64
-  runtime: ruby18
+  memory: 512
   path: "assets/standalone/simple_ruby_app"
   no_url: true
 
 standalone_simple_ruby19_app:
-  framework: "standalone"
   command: "ruby simple.rb"
-  memory: 64
-  runtime: ruby19
+  memory: 512
   path: "assets/standalone/simple_ruby_app"
   no_url: true
 
 standalone_java_app:
-  framework: "standalone"
   command: "bin/hello-cloud"
-  runtime: "java"
-  memory: 64
+  memory: 512
   path: ".assets-binaries/java_app.zip"
   no_url: true
-
-standalone_java_app_7:
-  framework: "standalone"
-  command: "bin/hello-cloud"
-  runtime: java7
-  memory: 256
-  path: ".assets-binaries/java_app.zip"
-  no_url: true
-
 
 standalone_node_app:
-  framework: "standalone"
   command: "node app.js"
-  runtime: node
-  memory: 64
-  path: "assets/standalone/node_app"
-
-standalone_node06_app:
-  framework: "standalone"
-  command: "node app.js"
-  runtime: node06
-  memory: 64
+  memory: 512
   path: "assets/standalone/node_app"
 
 standalone_ruby18_autoconfig:
-  framework: "standalone"
   command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
-  runtime: ruby18
-  memory: 64
+  memory: 512
   path: "assets/standalone/ruby_autoconfig"
 
-standalone_ruby19_autoconfig:
-  framework: "standalone"
-  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
-  runtime: ruby19
-  memory: 64
-  path: "assets/standalone/ruby_autoconfig"
-
-standalone_ruby_autoconfig_disabled_by_file:
-  framework: "standalone"
-  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
-  runtime: ruby18
-  memory: 64
-  path: "assets/standalone/ruby_autoconfig_disabled_by_file"
-
-standalone_ruby_autoconfig_disabled_by_gem:
-  framework: "standalone"
-  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
-  runtime: ruby18
-  memory: 64
-  path: "assets/standalone/ruby_autoconfig_disabled_by_gem"
-
-standalone_php_app:
-  framework: "standalone"
-  command: "php index.php"
-  runtime: php
-  memory: 64
-  path: "assets/standalone/php_app"
-  no_url: true
-
-standalone_python_app:
-  framework: "standalone"
-  command: "python HelloWorld.py"
-  runtime: python2
-  memory: 64
-  path: "assets/standalone/python_app"
-  no_url: true
-
-standalone_erlang_app:
-  framework: "standalone"
-  command: "erl -noshell -s helloworld start -s"
-  runtime: "erlangR14B02"
-  memory: 64
-  path: "assets/standalone/erlang_app"
-  no_url: true
-
-play_computer_database_autoconfig_disabled_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_computer_database_autoconfig_disabled_app_20:
+  memory: 512
   path: ".assets-binaries/computer_database_autoconfig_disabled.zip"
 
-play_computer_database_cf_by_name_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_computer_database_cf_by_name_app_20:
+  memory: 512
   path: ".assets-binaries/computer_database_cf_by_name.zip"
 
-play_computer_database_cf_by_type_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_computer_database_cf_by_type_app_20:
+  memory: 512
   path: ".assets-binaries/computer_database_cf_by_type.zip"
 
-play_computer_database_jpa_mysql_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_computer_database_jpa_mysql_app_20:
+  memory: 512
   path: ".assets-binaries/computer_database_jpa_mysql.zip"
 
-play_computer_database_jpa_app:
-  framework: "play"
-  memory: 128
-  runtime: java
-  path: ".assets-binaries/computer_database_jpa.zip"
+play_computer_database_jpa_app_21:
+  memory: 512
+  path: ".assets-binaries/computer_database_jpa-2.1.zip"
 
-play_computer_database_multi_dbs_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_computer_database_multi_dbs_app_20:
+  memory: 512
   path: ".assets-binaries/computer_database_multi_dbs.zip"
 
-play_computer_database_scala_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_computer_database_scala_app_20:
+  memory: 512
   path: ".assets-binaries/computer_database_scala.zip"
 
-play_todolist_app:
-  framework: "play"
-  memory: 128
-  runtime: java
+play_todolist_app_20:
+  memory: 512
   path: ".assets-binaries/todolist.zip"
 
-play_todolist_app_7:
-  framework: "play"
-  runtime: java7
-  memory: 256
-  path: ".assets-binaries/todolist.zip"
+play_todolist_with_cfruntime_app_21:
+  memory: 512
+  path: ".assets-binaries/todolist_with_cfruntime-2.1.zip"
 
-play_todolist_with_cfruntime_app:
-  framework: "play"
-  memory: 128
-  runtime: java
-  path: ".assets-binaries/todolist_with_cfruntime.zip"
-
-play_zentasks_cf_by_name_app:
-  framework: "play"
-  memory: 256
-  runtime: java
+play_zentasks_cf_by_name_app_20:
+  memory: 512
   path: ".assets-binaries/zentasks_cf_by_name.zip"
 
-play_zentasks_cf_by_type_app:
-  framework: "play"
-  memory: 128
-  runtime: java
-  path: ".assets-binaries/zentasks_cf_by_type.zip"
+play_zentasks_cf_by_type_app_21:
+  memory: 512
+  path: ".assets-binaries/zentasks_cf_by_type-2.1.zip"
 
 auto-reconfig-annotation-app:
-  framework: "spring"
-  runtime: java
   memory: 512
   path: ".assets-binaries/auto-reconfig-annotation-app.war"
 
 javaee-namespace-app:
-  framework: "spring"
-  runtime: java
   startup: "thin start"
-  memory: 256
+  memory: 512
   path: ".assets-binaries/javaee-namespace-app.war"
 
-sinatra_rmagick:
-  framework: "sinatra"
-  memory: 64
-  runtime: ruby19
-  path: "assets/sinatra/sinatra_rmagick"
+sinatra_imagemagick:
+  memory: 512
+  path: "assets/sinatra/sinatra_imagemagick"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
 
 node_imagemagick:
-  framework: "node"
-  runtime: node
-  memory: 64
+  memory: 512
   path: "assets/node/node_imagemagick"
+  command: "node app.js"
+
+spring_imagemagick_java6:
+  memory: 512
+  path: ".assets-binaries/spring_imagemagick.war"
 
 couchdb_app:
-  framework: "sinatra"
-  memory: 64
-  runtime: ruby19
+  memory: 512
   path: "assets/sinatra/couchdb_app"
+  command: "bundle exec ruby couchdb.rb -p $VCAP_APP_PORT"
 
 elasticsearch_app:
-  framework: "sinatra"
-  memory: 64
-  runtime: ruby19
+  memory: 512
   path: "assets/sinatra/elasticsearch_app"
+  command: "bundle exec ruby elasticsearch.rb -p $VCAP_APP_PORT"
+
+oauth2_app:
+  memory: 512
+  path: "assets/sinatra/oauth2_app"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
+
+sleeper:
+  memory: 512
+  path: "assets/sinatra/sleeper"
+  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
