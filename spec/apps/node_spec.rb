@@ -13,13 +13,12 @@ describe "Simple::Node" do
     @session.cleanup!
   end
 
-  it "access my application root and see it's running version",
-    :p1 => true do
+  it "access my application root and see it's running version" do
     app = create_push_app("app_node_version04")
     app.stats.should_not == nil
     app.get_response(:get).should_not == nil
     app.get_response(:get).to_str.should_not == nil
-    app.get_response(:get).to_str.should =~ /running version v0.4/
+    app.get_response(:get).to_str.should =~ /running version/
   end
 
   it "access my application root and see hello from git" do
@@ -30,7 +29,7 @@ describe "Simple::Node" do
     app.get_response(:get).to_str.should == "hello from git"
   end
 
-  it "access my application root and see hello from express", :p1 => true do
+  it "access my application root and see hello from express" do
     app = create_push_app("app_node_dependencies06")
     app.stats.should_not == nil
     app.get_response(:get).should_not == nil
@@ -38,14 +37,14 @@ describe "Simple::Node" do
     app.get_response(:get).to_str.should == "hello from express"
   end
 
-  it "access my application root and see hello from node-gyp", :p1 => true do
+  it "access my application root and see hello from node-gyp" do
     app = create_push_app("app_node_dependencies08")
     app.stats.should_not == nil
     app.get_response(:get).to_str.should == "hello from node-gyp"
   end
 
-  it "Simple node app and no URL", :p1 => true do
+  it "Simple node app and no URL" do
     app = create_push_app("standalone_node_app")
-    app.logs =~ /it's running version v0.4/
+    app.logs =~ /it's running version/
   end
 end

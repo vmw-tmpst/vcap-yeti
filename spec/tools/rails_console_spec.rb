@@ -17,20 +17,13 @@ describe "Tools::RailsConsole" do
     @session.cleanup!
   end
 
-  def open_console(app)
+  def cfoundry_app(app)
     apps = @client.apps
-    app = apps.find{ |a| a.name == app.name}
-    app.console = true
-    app.restart!
-    app
+    apps.find{ |a| a.name == app.name}
   end
 
-  it "rails test console", :slow => true, :p1 => true do
-    app = create_push_app("rails_console_test_app", nil, nil, [POSTGRESQL_MANIFEST])
-    app = open_console(app)
-
-    sleep 1
-
+  xit "rails test console" do
+    app = cfoundry_app(create_push_app("rails_console_test_app", nil, nil, [POSTGRESQL_MANIFEST]))
     @console = init_console(@client, app)
 
     response = @console.send_console_command('app.class')
@@ -41,13 +34,8 @@ describe "Tools::RailsConsole" do
     match.should == true
   end
 
-  it "rails test console stdout redirect", :slow => true do
-    app = create_push_app("rails_console_test_app", nil, nil, [POSTGRESQL_MANIFEST])
-
-    app = open_console(app)
-
-    sleep 1
-
+  xit "rails test console stdout redirect" do
+    app = cfoundry_app(create_push_app("rails_console_test_app", nil, nil, [POSTGRESQL_MANIFEST]))
     @console = init_console(@client, app)
 
     response = @console.send_console_command("puts 'hi'")
@@ -55,13 +43,8 @@ describe "Tools::RailsConsole" do
     response.should == expect
   end
 
-  it "rails test console rake task", :slow => true do
-    app = create_push_app("rails_console_test_app", nil, nil,  [POSTGRESQL_MANIFEST])
-
-    app = open_console(app)
-
-    sleep 1
-
+  xit "rails test console rake task" do
+    app = cfoundry_app(create_push_app("rails_console_test_app", nil, nil,  [POSTGRESQL_MANIFEST]))
     @console = init_console(@client, app)
 
     response = @console.send_console_command("`rake routes`")
@@ -72,13 +55,8 @@ describe "Tools::RailsConsole" do
     match.should == true
   end
 
-  it "Rails Console runs tasks with correct ruby version in path", :slow => true do
-
-    app = create_push_app("rails_console_test_app", nil, nil,  [POSTGRESQL_MANIFEST])
-    app = open_console(app)
-
-    sleep 1
-
+  xit "Rails Console runs tasks with correct ruby version in path" do
+    app = cfoundry_app(create_push_app("rails_console_test_app", nil, nil,  [POSTGRESQL_MANIFEST]))
     @console = init_console(@client, app)
 
     response = @console.send_console_command("`ruby --version`")
@@ -90,11 +68,8 @@ describe "Tools::RailsConsole" do
   end
 
 
-  it "rails test console MySQL connection", :slow => true, :mysql=>true do
-    app = create_push_app("rails_console_19_test_app", nil, nil, [MYSQL_MANIFEST])
-    app = open_console(app)
-    sleep 1
-
+  xit "rails test console MySQL connection" do
+    app = cfoundry_app(create_push_app("rails_console_19_test_app", nil, nil, [MYSQL_MANIFEST]))
     @console = init_console(@client, app)
 
     response = @console.send_console_command("User.all")
@@ -123,11 +98,8 @@ describe "Tools::RailsConsole" do
 
   end
 
-  it "rails test console Postgres connection", :slow => true, :postgresql=>true do
-    app = create_push_app("rails_console_19_test_app", nil, nil, [POSTGRESQL_MANIFEST])
-    app = open_console(app)
-    sleep 1
-
+  xit "rails test console Postgres connection" do
+    app = cfoundry_app(create_push_app("rails_console_19_test_app", nil, nil, [POSTGRESQL_MANIFEST]))
     @console = init_console(@client, app)
 
     response = @console.send_console_command("User.all")

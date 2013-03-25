@@ -10,7 +10,7 @@ module BVT::Harness
       @session  = session
       @client   = @session.client
       @log      = @session.log
-      @domain      = domain
+      @domain   = domain
     end
 
     def inspect
@@ -94,7 +94,10 @@ module BVT::Harness
       unless @app.running?
         @log.info "Start App: #{@app.name}"
         begin
-          @app.start!(true, &blk)
+          @app.start!(true) do |url|
+            puts "Pushing #{@app.name} - #{url}"
+            blk.call(url) if blk
+          end
         rescue Exception => e
           @log.error "Start App: #{@app.name} failed.\n#{e.to_s}"
           raise RuntimeError, "Start App: #{@app.name} failed.\n#{e.to_s}\n#{@session.print_client_logs}"
@@ -379,7 +382,7 @@ module BVT::Harness
         raise RuntimeError, "Fail to get logs for Application: #{@app.name}!" +
             "\n#{e.to_s}\n#{@session.print_client_logs}"
       end
-      @log.debug("Get Application #{@app.name}, logs contents: #{body}")
+      @log.debug("=============== Get Application #{@app.name}, logs contents: #{body}")
       body
     end
 

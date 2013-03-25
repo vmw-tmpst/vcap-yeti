@@ -5,7 +5,7 @@
 
 # Since we have switched to buildpacks staging time has increased
 # so until we start caching gems, bins, etc. timeout is 5min
-timeout_secs: 900
+timeout_secs: 120
 
 job_timeout_secs: 30
 sleep_secs: 1
@@ -57,21 +57,23 @@ env_test_app:
   path: "assets/sinatra/env_test_app"
   command: "bundle exec ruby env_test.rb -p $VCAP_APP_PORT"
 
-broken_app:
+# Ruby apps:
+ruby18:
   memory: 512
-  path: "assets/sinatra/broken_app"
-  command: "bundle exec ruby broken.rb -p $VCAP_APP_PORT"
+  path: "assets/ruby/ruby18"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
-git_gems_app_ruby18:
+ruby19:
   memory: 512
-  path: "assets/sinatra/git_gems_app"
-  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
+  path: "assets/ruby/ruby19"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
 
-git_gems_app_ruby19:
+rails3:
   memory: 512
-  path: "assets/sinatra/git_gems_app"
-  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
+  path: "assets/ruby/rails3"
+  command: "bundle exec rake db:migrate --trace && bundle exec rails server thin -p $PORT"
 
+#-
 sinatra_gem_groups:
   memory: 512
   path: "assets/sinatra/gem_groups"
@@ -86,11 +88,6 @@ broken_gem_app:
   memory: 512
   path: "assets/sinatra/broken_gem_app"
   command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
-
-rails3_app:
-  memory: 512
-  path: "assets/rails3/rails3_app"
-  command: "bundle exec rake db:migrate && bundle exec rails server thin -p $PORT"
 
 jpa_app:
   memory: 512
@@ -323,12 +320,6 @@ standalone_ruby_app:
 
 standalone_simple_ruby_app:
   command: "ruby simple.rb"
-  memory: 512
-  path: "assets/standalone/simple_ruby_app"
-  no_url: true
-
-standalone_simple_ruby_quotes_app:
-  command: "ruby \"simple.rb\""
   memory: 512
   path: "assets/standalone/simple_ruby_app"
   no_url: true
