@@ -16,6 +16,16 @@ task :full, :thread_number do |t, args|
   longevity(threads, {'tags' => '~admin'})
 end
 
+desc "run all cases, including spec/ and services_spec"
+task :all, :thread_number do |t, args|
+  RakeHelper.sync_assets
+  threads = 10
+  threads = args[:thread_number].to_i if args[:thread_number]
+  RakeHelper.prepare_all(threads)
+  create_reports_folder
+  longevity(threads, {'tags' => '~admin'}, false, File.dirname(__FILE__))
+end
+
 desc "run java tests (spring, java_web) in parallel, e.g. rake java[5] (default to 10, max = 16)"
 task :java, :thread_number, :longevity, :fail_fast do |t, args|
   RakeHelper.sync_assets
@@ -114,10 +124,10 @@ def get_longevity_number
   ENV['VCAP_BVT_LONGEVITY'] ? ENV['VCAP_BVT_LONGEVITY'].to_i : 1
 end
 
-def longevity(threads, filter, rerun=false)
+def longevity(threads, filter, rerun=false, spec_folder="")
   loop_number = get_longevity_number
   if loop_number == 1
-    result = ParallelHelper.run_tests(threads, filter, rerun)
+    result = ParallelHelper.run_tests(threads, filter, rerun, spec_folder)
     if result[:interrupted] || result[:failure_number] > 0
       exit(1)
     else
@@ -138,7 +148,7 @@ def longevity(threads, filter, rerun=false)
   while TRUE
     puts yellow("This is run: #{actual_loop_number}")
     begin
-      result = ParallelHelper.run_tests(threads, filter, rerun)
+      result = ParallelHelper.run_tests(threads, filter, rerun, spec_folder)
       total_case_number += result[:case_number]
       total_failure_number += result[:failure_number]
       total_pending_number += result[:pending_number]
