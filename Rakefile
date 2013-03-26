@@ -63,9 +63,9 @@ task :services, :thread_number do |t, args|
   RakeHelper.prepare_all(threads)
   create_reports_folder
   if ENV["VCAP_BVT_SERVICE"]
-    longevity(threads, {'tags' => "~admin,#{ENV["VCAP_BVT_SERVICE"].downcase}"})
+    longevity(threads, {'tags' => "~admin,#{ENV["VCAP_BVT_SERVICE"].downcase}"}, false, File.dirname(__FILE__))
   else
-    longevity(threads, {'tags' => '~admin,mongodb,rabbitmq,mysql,redis,postgresql,neo4j,vblob'})
+    longevity(threads, {'tags' => '~admin,mongodb,rabbitmq,mysql,redis,postgresql,neo4j,vblob'}, false, File.dirname(__FILE__))
   end
 end
 
