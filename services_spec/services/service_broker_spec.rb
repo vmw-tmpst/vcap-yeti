@@ -2,7 +2,6 @@ require "uri"
 require "json"
 require "harness"
 require "spec_helper"
-require "services/service_broker_helper"
 include BVT::Spec
 
 describe "ServiceBroker" do
