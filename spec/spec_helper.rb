@@ -5,6 +5,7 @@ require 'syck'
 YAML::ENGINE.yamler = 'syck'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].map { |f| require f }
+Dir["#{File.dirname(__FILE__)}/../services_spec/*/*_helper.rb"].map { |f| require f }
 
 class Bignum
   def to_json(_ = nil)
