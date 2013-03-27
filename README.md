@@ -158,6 +158,8 @@ Rake Tasks:
 <br>run core tests in parallel, e.g. rake test\[5\] (default to 10, max = 16)
 - full
 <br>run full tests in parallel, e.g. rake full\[5\] (default to 10, max = 16)
+- all
+<br>run all tests in parallel, including cases in spec/ and services_spec/ e.g. rake all\[5\] (default to 10, max = 16)
 - random
 <br>run all bvts randomly, e.g. rake random\[1023\] to re-run seed 1023
 - java
@@ -170,7 +172,7 @@ Rake Tasks:
 <br>run ruby tests (rails3, sinatra, rack) in parallel
 <br>e.g. rake ruby\[5\] (default to 10, max = 16)
 - services
-<br>run service tests (mongodb/redis/mysql/postgres/rabbitmq/neo4j/vblob) in parallel
+<br>run all service tests (mongodb/redis/mysql/postgres/rabbitmq/neo4j/vblob) in parallel
 <br>e.g. rake services\[5\] (default to 10, max = 16)
 - core
 <br>run core tests for verifying that an installation meets minimal Cloud Foundry
