@@ -11,9 +11,9 @@ describe 'core services' do
   # By "agreement" we expect service versions to
   # depend on "v" version
   let(:mysql_versions) { @session.v2? ? ['5.5'] : ['5.1'] }
-  let(:postgresql_versions) { @session.v2? ? ['9.1'] : ['9.0'] }
+  let(:postgresql_versions) { @session.v2? ? ['9.2'] : ['9.0'] }
   let(:redis_versions) { @session.v2? ? ['2.6'] : ['2.2'] }
-  let(:rabbitmq_versions) { @session.v2? ? ['2.8'] : ['2.4'] }
+  let(:rabbitmq_versions) { @session.v2? ? ['3.0'] : ['2.4'] }
   let(:mongodb_versions) { @session.v2? ? ['2.2'] : ['2.0'] }
 
   it { mysql_versions.each { |v| should have_service 'mysql', v } }
