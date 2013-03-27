@@ -24,7 +24,7 @@ describe "AutoStaging::RubyRails3" do
 
   it "start application and write data" do
     service = create_service(MYSQL_MANIFEST)
-    app = create_app("rails3_app")
+    app = create_app("rails3")
     app.push([service])
     app.healthy?.should be_true, "Application #{app.name} is not running"
     widget_name = "somewidget"
