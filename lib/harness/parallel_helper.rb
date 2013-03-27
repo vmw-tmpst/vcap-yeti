@@ -9,12 +9,13 @@ module BVT::Harness
     SPEC_PATH      = File.join(YETI_HOME_PATH, "spec/")
     REPORT_PATH    = File.join(YETI_HOME_PATH, "reports/")
 
-    def run_tests(thread_number, filter={}, rerun=false)
+    def run_tests(thread_number, filter={}, rerun=false, spec_folder="")
       options = {}
       options[:env_list] = get_parallel_users(thread_number)
       options[:thread_number] = thread_number
       options[:filter] = filter
       options[:case_folder] = SPEC_PATH
+      options[:case_folder] = spec_folder if spec_folder != ""
       options[:report_folder] = REPORT_PATH
       options[:rerun] = rerun
       options[:separate_rerun_report] = false if ENV["VCAP_BVT_CI_SINGLE_REPORT"] == "true"
