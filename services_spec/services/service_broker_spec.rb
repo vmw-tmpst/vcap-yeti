@@ -13,7 +13,6 @@ describe "ServiceBroker" do
   end
 
   after(:each) do
-    show_crashlogs
     @session.cleanup! if @session
     cleanup
   end

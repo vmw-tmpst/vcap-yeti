@@ -5,7 +5,7 @@
 
 # Since we have switched to buildpacks staging time has increased
 # so until we start caching gems, bins, etc. timeout is 5min
-timeout_secs: 120
+timeout_secs: 360
 
 job_timeout_secs: 30
 sleep_secs: 1
@@ -72,6 +72,18 @@ rails3:
   memory: 512
   path: "assets/ruby/rails3"
   command: "bundle exec rake db:migrate --trace && bundle exec rails server thin -p $PORT"
+
+# Lifecycle apps:
+basic:
+  memory: 512
+  path: "assets/lifecycle/basic"
+  command: "bundle exec ruby main.rb -p $VCAP_APP_PORT"
+
+worker:
+  memory: 512
+  path: "assets/lifecycle/worker"
+  command: "bundle exec ruby main.rb"
+  no_url: true
 
 #-
 sinatra_gem_groups:
@@ -324,12 +336,6 @@ standalone_simple_ruby_app:
   path: "assets/standalone/simple_ruby_app"
   no_url: true
 
-standalone_simple_ruby19_app:
-  command: "ruby simple.rb"
-  memory: 512
-  path: "assets/standalone/simple_ruby_app"
-  no_url: true
-
 standalone_java_app:
   command: "bin/hello-cloud"
   memory: 512
@@ -426,9 +432,4 @@ elasticsearch_app:
 oauth2_app:
   memory: 512
   path: "assets/sinatra/oauth2_app"
-  command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
-
-sleeper:
-  memory: 512
-  path: "assets/sinatra/sleeper"
   command: "bundle exec ruby app.rb -p $VCAP_APP_PORT"
